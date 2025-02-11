@@ -1,35 +1,107 @@
 ---
 title: Setup
 layout: home
+nav_order: 1
 ---
 
-This is a *bare-minimum* template to create a Jekyll site that uses the [Just the Docs] theme. You can easily set the created site to be published on [GitHub Pages] – the [README] file explains how to do that, along with other details.
+# Training Dynamic Visualization Tool
 
-If [Jekyll] is installed on your computer, you can also build and preview the created site *locally*. This lets you test changes before committing them, and avoids waiting for GitHub Pages.[^1] And you will be able to deploy your local build to a different platform than GitHub Pages.
+> 🏗️ The tool is under renovation, and only part of the datasets are validated to be visualized. Introduction to the original tool and research project and could be found in [PROTOTYPE.md](PROTOTYPE.md), while it could contain some obsolete descriptions like that the old `Vis` and `VisTool` folders no longer exists, and the old `Tool` folder was separated into `tool` and `visualize` sub-projects.
 
-More specifically, the created site:
+## How To Start the Tool
 
-- uses a gem-based approach, i.e. uses a `Gemfile` and loads the `just-the-docs` gem
-- uses the [GitHub Pages / Actions workflow] to build and publish the site on GitHub Pages
+### Prepare the Project
 
-Other than that, you're free to customize sites that you create with this template, however you like. You can easily change the versions of `just-the-docs` and Jekyll it uses, as well as adding further plugins.
+```bash
+$ git clone <https://github.com/code-philia/time-travelling-visualizer.git>
+$ cd time-travelling-visualizer
+```
 
-[Browse our documentation][Just the Docs] to learn more about how to use this theme.
+### Switch Git Branch
 
-To get started with creating a site, simply:
+To try our latest features, switch to the following branch:
 
-1. click "[use this template]" to create a GitHub repository
-2. go to Settings > Pages > Build and deployment > Source, and select GitHub Actions
+```bash
+$ git checkout feat/visactor
+```
 
-If you want to maintain your docs in the `docs` directory of an existing project repo, see [Hosting your docs from an existing project repo](https://github.com/just-the-docs/just-the-docs-template/blob/main/README.md#hosting-your-docs-from-an-existing-project-repo) in the template README.
+#### Create a virtual environment
 
-----
+We recommend to [create a venv](https://docs.python.org/3/library/venv.html) with pyhont 3.10 before installing all the dependencies, especially when your device has enough storage.
 
-[^1]: [It can take up to 10 minutes for changes to your site to publish after you push the changes to GitHub](https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/creating-a-github-pages-site-with-jekyll#creating-your-site).
+#### Install PyTorch
 
-[Just the Docs]: https://just-the-docs.github.io/just-the-docs/
-[GitHub Pages]: https://docs.github.com/en/pages
-[README]: https://github.com/just-the-docs/just-the-docs-template/blob/main/README.md
-[Jekyll]: https://jekyllrb.com
-[GitHub Pages / Actions workflow]: https://github.blog/changelog/2022-07-27-github-pages-custom-github-actions-workflows-beta/
-[use this template]: https://github.com/just-the-docs/just-the-docs-template/generate
+Refer to the [PyTorch official guide](https://pytorch.org/get-started/locally/). Installation methods vary by platform, and PyTorch versions depend on your GPU and the appropriate CUDA or ROCm version.
+
+#### Install All Dependencies
+
+Run the following command to install all required dependencies:
+
+```bash
+$ pip install -r requirements.all.txt
+```
+and
+```bash
+$ cd web
+$ npm run install
+```
+
+
+### Download The Sample Dataset
+
+We recommend using this dataset to try the new feature.
+
+- **bash/zsh:**
+
+  ```bash
+  $ wget https://harkxa.sn.files.1drv.com/y4moeyNzEN8YAThWfZ3KqdgMTMOiw8bPpfla5qSeJoEXMydGUCpFU1bcQPDMUtzlbeZnP4len61rozjPqxn30PWHMe5696VvAP0vctH7LyA11Usc8571J30qCTFJ27UOOLEo8PMhxzUPWwYtJVEqyiiYkV0MSg9pGHT33aOFi8F2_L85gltRCL_QnxB1g2D6pPagaqRi9wyC6uxsgARbA1kbQ -O gcb_tokens.zip
+  unzip gcb_tokens.zip
+  ```
+
+- **PowerShell:**
+
+  ```powershell
+  Invoke-WebRequest https://harkxa.sn.files.1drv.com/y4moeyNzEN8YAThWfZ3KqdgMTMOiw8bPpfla5qSeJoEXMydGUCpFU1bcQPDMUtzlbeZnP4len61rozjPqxn30PWHMe5696VvAP0vctH7LyA11Usc8571J30qCTFJ27UOOLEo8PMhxzUPWwYtJVEqyiiYkV0MSg9pGHT33aOFi8F2_L85gltRCL_QnxB1g2D6pPagaqRi9wyC6uxsgARbA1kbQ -OutFile gcb_tokens.zip
+  Expand-Archive gcb_tokens.zip -DestinationPath .
+  ```
+
+### Running the Backend Server
+
+1. Start the backend server
+If you are using a virtual environment, be sure it is activated. Then run the following command:
+
+```bash
+~/time-travelling-visualizer$ conda activate venv
+(venv) ~/time-travelling-visualizer$ cd tool/server/
+(venv) ~/time-travelling-visualizer/tool/server$ python server.py
+```
+Observe if the server starts on port 5010 (usually it does). If not, modify it in the next step.
+```bash
+WARNING: This is a development server. Do not use it in a production deployment. Use a production MSGT server instead.
+* Running on all addresses (0,0,0,0)
+* Running on http://127.0.0.1[5010]
+* Running on http://192.168.98.170:5010
+Press CTRLHC to quit
+```
+
+2. Start the frontend interface
+If the server did not start on port 5010 in the previous step, modify line 125 in the `web/src/state/store.tsx` file:
+```
+124 // settings
+125 backendHost: 'localhost:5010', // modify here
+```
+Change the port after localhost to the corresponding port (e.g., 5011, 5012). After modification, execute the following in the project root directory:
+```bash
+(venv) ~/time-travelling-visualizer$ cd web
+(venv) ~/time-travelling-visualizer/web$ npm run dev
+```
+This will start a frontend server. Open the following URL like `http://localhost:5175/` in your browser.
+```
+  ➜  Local:   http://localhost:5175/
+  ➜  Network: use --host to expose
+  ➜  press h + enter to show help
+```
+
+3. Fill in the **Content Path** field the absolute path to the extracted dataset and click **Load Visualization Result**. For **Visualization Method** select **DVI** of **TimeVis**.
+
+You should now see the visualized charts, and the terminal will display access logs.

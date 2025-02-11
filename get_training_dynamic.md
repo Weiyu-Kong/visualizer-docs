@@ -1,6 +1,6 @@
 ---
 title: Get Training Dynamic
-layout: get_training_dynamic
+nav_order: 2
 ---
 
 TODO
