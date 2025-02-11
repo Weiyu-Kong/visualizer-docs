@@ -65,9 +65,10 @@ We recommend using this dataset to try the new feature.
   Expand-Archive gcb_tokens.zip -DestinationPath .
   ```
 
-### Running the Backend Server
+### Run the Tool
 
 1. Start the backend server
+
 If you are using a virtual environment, be sure it is activated. Then run the following command:
 
 ```bash
@@ -85,6 +86,7 @@ Press CTRLHC to quit
 ```
 
 2. Start the frontend interface
+
 If the server did not start on port 5010 in the previous step, modify line 125 in the `web/src/state/store.tsx` file:
 ```
 124 // settings
@@ -102,6 +104,8 @@ This will start a frontend server. Open the following URL like `http://localhost
   ➜  press h + enter to show help
 ```
 
-3. Fill in the **Content Path** field the absolute path to the extracted dataset and click **Load Visualization Result**. For **Visualization Method** select **DVI** of **TimeVis**.
+3. Use the tool
+
+Fill in the **Content Path** field the absolute path to the extracted dataset and click **Load Visualization Result**. For **Visualization Method** select **DVI** of **TimeVis**.
 
 You should now see the visualized charts, and the terminal will display access logs.
